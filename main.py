@@ -11,20 +11,30 @@ random.seed = (os.urandom(1024))
 url = "http://127.0.0.1/wlca"
 
 names = json.loads(open("names.json").read())
-count = 0
-submitted = 0
-while count <= 1000:
+surnames = json.loads(open("surnames.json").read())
+domains = json.loads(open("domains.json").read())
+words = json.loads(open("words.json").read())
+count = 1
+submitted = 1
+
+while count <= 2:
     for name in names:
-        print(f'{count}/{submitted}')
-        name_extra = ''.join(random.choice(string.digits))
+        if submitted < 10000:
+            name_extra = ''.join(str(random.randint(0, 1000)))  # Adds a number after name between 0, 1000
 
-        username = name.lower() + name_extra + '@yahoo.com'
-        password = ''.join(random.choice(chars) for i in range(12))
+            username = name.lower() + '.' + (random.choice(surnames).lower()) + name_extra + '@' + random.choice(
+                domains).lower()
 
-        requests.post(url, allow_redirects=False, data={
-            'j_username': username,
-            'j_password': password
-        })
-        print(f'Sending username: {username} and password: {password}')
-        submitted += 1
+            password = random.choice(words) + ''.join(random.choice(chars) for i in range(4))
+
+            # requests.post(url, allow_redirects=False, data={
+            #     'j_username': username,  # `j_username` needs to be replaced with website's username form variable
+            #     'j_password': password  # `j_password` needs to be replaced with website's password form variable
+            # })
+            print(f'{count}/{submitted}')
+            print(f'{username} - {password}')
+            # print(f'Sending username: {username} and password: {password}')
+            submitted += 1
     count += 1
+
+print(len(words))
